@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "FieldOfTankGameModeBase.generated.h"
+#include "FieldOfTankGameMode.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class FIELDOFTANK_API AFieldOfTankGameModeBase : public AGameModeBase
+class FIELDOFTANK_API AFieldOfTankGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 	
