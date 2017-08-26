@@ -17,7 +17,21 @@ class FIELDOFTANK_API ATankPlayerController : public APlayerController
 	
 
 public:
+	ATankPlayerController();
 	ATank* GetControlledTank() const;
 	
-	void BeginPlay() override;
+	virtual void BeginPlay() override;
+
+	virtual void Tick(float DeltaTime) override;
+private:
+	void AimTowardsCrosshair();
+	bool GetSightRayHitLocation(FVector& hitLocation);
+
+	bool GetLookDirection(FVector2D screenLocation, FVector & lookDirection);
+
+	UPROPERTY(EditAnywhere)
+	float m_crosshairXRatio;
+	UPROPERTY(EditAnywhere)
+	float m_crosshairYRatio;
+
 };
