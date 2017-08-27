@@ -17,6 +17,10 @@ class FIELDOFTANK_API ATankAIController : public AAIController
 
 private:
 	void BeginPlay() override;
+	void Tick(float DeltaTime) override;
+
+private:
+	void AimTowardsPlayer();
 	ATank* GetControlledTank() const;
 	ATank* GetPlayerTank() const;
 };

@@ -2,6 +2,7 @@
 
 #include "TankPlayerController.h"
 #include "Engine/World.h"
+#include "Runtime/Engine/Classes/Camera/PlayerCameraManager.h"
 
 ATankPlayerController::ATankPlayerController()
 {
@@ -41,7 +42,7 @@ void ATankPlayerController::AimTowardsCrosshair()
 	FVector hitLocation;
 	if (GetSightRayHitLocation(hitLocation))
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("HitLocatioin: %s"), *hitLocation.ToString());
+		GetControlledTank()->AimAt(hitLocation);
 	}
 }
 
@@ -53,7 +54,8 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& hitLocation)
 	FVector lookDirection;
 	if (GetLookDirection(screenLocation, lookDirection))
 	{
-		return true;
+		if(GetLookVectorHitLocation(lookDirection, hitLocation))
+			return true;
 	}
 	return false;
 }
@@ -61,9 +63,17 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& hitLocation)
 bool ATankPlayerController::GetLookDirection(FVector2D screenLocation, FVector& lookDirection)
 {
 	FVector worldLocation;
-	if (DeprojectScreenPositionToWorld(screenLocation.X, screenLocation.Y, worldLocation, lookDirection))
+	return DeprojectScreenPositionToWorld(screenLocation.X, screenLocation.Y, worldLocation, lookDirection);
+}
+
+bool ATankPlayerController::GetLookVectorHitLocation(FVector lookDirection, FVector& hitLocation) const
+{
+	FVector startLocation = PlayerCameraManager->GetCameraLocation();
+	FVector endLocation = startLocation + lookDirection * m_lineTraceRange;
+	FHitResult hitResult;
+	if (GetWorld()->LineTraceSingleByChannel(hitResult, startLocation, endLocation, ECC_Visibility))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("World Directioin: %s"), *lookDirection.ToString());
+		hitLocation = hitResult.Location;
 		return true;
 	}
 	return false;

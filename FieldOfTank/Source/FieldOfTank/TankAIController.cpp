@@ -3,16 +3,6 @@
 #include "TankAIController.h"
 #include "Engine/World.h"
 
-ATank* ATankAIController::GetControlledTank() const
-{
-	return Cast<ATank>(GetPawn());
-}
-
-ATank * ATankAIController::GetPlayerTank() const
-{
-	APawn* playerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
-	return Cast<ATank>(playerPawn);
-}
 
 void ATankAIController::BeginPlay()
 {
@@ -37,4 +27,32 @@ void ATankAIController::BeginPlay()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("AI Controller not Found Player"));
 	}
+}
+
+void ATankAIController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	AimTowardsPlayer();
+}
+
+void ATankAIController::AimTowardsPlayer()
+{
+	if (!GetControlledTank())
+		return;
+	if (!GetPlayerTank())
+		return;
+	FVector playerLocation = GetPlayerTank()->GetActorLocation();
+	GetControlledTank()->AimAt(playerLocation);
+}
+
+
+ATank* ATankAIController::GetControlledTank() const
+{
+	return Cast<ATank>(GetPawn());
+}
+
+ATank * ATankAIController::GetPlayerTank() const
+{
+	APawn* playerPawn = GetWorld()->GetFirstPlayerController()->GetPawn();
+	return Cast<ATank>(playerPawn);
 }

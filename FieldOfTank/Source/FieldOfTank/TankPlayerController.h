@@ -29,9 +29,13 @@ private:
 
 	bool GetLookDirection(FVector2D screenLocation, FVector & lookDirection);
 
+	bool GetLookVectorHitLocation(FVector lookDirection, FVector & hitLocation) const;
+
 	UPROPERTY(EditAnywhere)
-	float m_crosshairXRatio;
+	float m_crosshairXRatio = 0.5;
 	UPROPERTY(EditAnywhere)
-	float m_crosshairYRatio;
+	float m_crosshairYRatio = 0.33333;
+	UPROPERTY(EditAnywhere)
+	float m_lineTraceRange = 10000;
 
 };
