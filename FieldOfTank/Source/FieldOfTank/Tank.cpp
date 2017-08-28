@@ -1,23 +1,25 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Tank.h"
+#include "Runtime/CoreUObject/Public/UObject/UObjectGlobals.h"
 
-
-// Sets default values
 ATank::ATank()
 {
- 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	m_tankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Coponent"));
 }
 
 void ATank::AimAt(FVector& hitLocation)
 {
 	auto tankName = GetName();
-	UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"), *tankName, *hitLocation.ToString());
+	m_tankAimingComponent->AimAt(hitLocation, launchSpeed);
 }
 
-// Called when the game starts or when spawned
+void ATank::SetBarrelReference(UStaticMeshComponent * barrelToSet)
+{
+	m_tankAimingComponent->SetBarrelReference(barrelToSet);
+}
+
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
